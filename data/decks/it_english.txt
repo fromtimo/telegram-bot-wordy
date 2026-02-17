@@ -1,0 +1,249 @@
+Algorithm алгоритм
+Application приложение
+Architecture архитектура
+Backend серверная часть
+Backward compatibility обратная совместимость
+Bandwidth пропускная способность
+Big Data большой объем данных
+Binary двоичный
+Blockchain блокчейн
+Build сборка
+Cache кэш
+Cloud computing облачные вычисления
+Cluster кластер
+Codebase кодовая база
+Component компонент
+Configuration конфигурация
+Container контейнер
+Database база данных
+Deployment развертывание
+Design Pattern шаблон проектирования
+Distributed system распределенная система
+Endpoint конечная точка
+Feature функция
+Framework фреймворк
+Frontend клиентская часть
+Gateway шлюз
+Infrastructure инфраструктура
+Integration интеграция
+Interface интерфейс
+Latency задержка
+Library библиотека
+Load balancing балансировка нагрузки
+Middleware промежуточное ПО
+Microservices микросервисы
+Monolith монолит
+Network сеть
+Orchestration оркестрация
+Platform платформа
+Protocol протокол
+Proxy прокси
+Scalability масштабируемость
+Schema схема
+Server сервер
+Service служба
+Software программное обеспечение
+Source code исходный код
+Specification спецификация
+System система
+Throughput пропускная способность
+Versioning управление версиями
+Agile гибкий
+API программный интерфейс приложения
+Argument аргумент
+Array массив
+Bug ошибка
+Class класс
+Compile компилировать
+Constant константа
+Constructor конструктор
+Data type тип данных
+Debugging отладка
+Declaration объявление
+DevOps методология разработки и эксплуатации
+Exception исключение
+Expression выражение
+Function функция
+Garbage collection сборка мусора
+IDE интегрированная среда разработки
+Inheritance наследование
+Interface интерфейс
+Iterator итератор
+JSON формат обмена данными
+Keyword ключевое слово
+Loop цикл
+Method метод
+Module модуль
+Object объект
+OOP объектно ориентированное программирование
+Operator оператор
+Parameter параметр
+Polymorphism полиморфизм
+Recursion рекурсия
+Repository репозиторий
+Script скрипт
+SDK комплект разработчика
+Statement инструкция
+String строка
+Syntax синтаксис
+Variable переменная
+ACID набор свойств транзакций
+Backup резервная копия
+Connection pool пул соединений
+Constraint ограничение
+Cursor курсор
+Entity сущность
+Field поле
+Index индекс
+JOIN оператор соединения
+Migration миграция
+NoSQL нереляционная БД
+ORM объектно реляционное отображение
+Query запрос
+Record запись
+Relational database реляционная база данных
+Replication репликация
+Row строка
+Schema схема
+SQL язык структурированных запросов
+Table таблица
+Transaction транзакция
+API key ключ API
+Authentication аутентификация
+Authorization авторизация
+Bandwidth пропускная способность
+Certificate сертификат
+Cipher шифр
+Cookie куки файл
+DNS система доменных имен
+Encryption шифрование
+Firewall брандмауэр
+Gateway шлюз
+HTTP протокол передачи гипертекста
+HTTPS защищенный HTTP
+Packet пакет
+Payload полезная нагрузка
+Port порт
+Protocol протокол
+Proxy прокси
+Request запрос
+Response ответ
+Router маршрутизатор
+SSL/TLS протоколы шифрования
+Token токен
+VPN виртуальная частная сеть
+Backlog перечень задач
+Build сборка
+CI/CD непрерывная интеграция/непрерывное развертывание
+Commit коммит
+Deploy развертывать
+Environment среда
+Epic эпик
+Feature функциональность
+GIT система контроля версий
+Iteration итерация
+Kanban методология Канбан
+Merge слияние
+Pull Request запрос на слияние
+Refactoring рефакторинг
+Regression регрессия
+Release выпуск
+Repository репозиторий
+Scrum методология Скрам
+Sprint спринт
+Staging промежуточная среда
+Stand up стендап митинг
+Task задача
+Test тест
+Ticket тикет
+Version control контроль версий
+Waterfall каскадная модель разработки
+Acceptance testing приемочное тестирование
+Assertion утверждение
+Automation автоматизация
+Bug ошибка
+Build сборка
+Code coverage покрытие кода тестами
+Debugging отладка
+Deploy развертывать
+Environment среда
+Fixture фикстура
+Integration testing интеграционное тестирование
+Manual testing ручное тестирование
+Performance testing тестирование производительности
+QA обеспечение качества
+Regression testing регрессионное тестирование
+Release выпуск
+Scenario сценарий
+Smoke testing дымовое тестирование
+Test case тестовый случай
+Unit testing модульное тестирование
+Asynchronous асинхронный
+Boilerplate шаблонный
+Bottleneck узкое место
+Brainstorming мозговой штурм
+Break/fix процесс исправления сбоев
+Bug ошибка
+Build сборка
+Code review проверка кода
+Cutting edge передовой
+Debt долг
+Deploy развертывать
+Downtime время простоя
+Edge case граничный случай
+Efficient эффективный
+Elegant solution элегантное решение
+Escalate эскалировать
+Estimate оценка
+Feedback обратная связь
+Fix исправлять
+Frequently Asked Questions часто задаваемые вопросы
+Hands on практический
+Hardware аппаратное обеспечение
+Impact влияние
+Implement внедрять
+Improvement улучшение
+Incident инцидент
+I/O ввод/вывод
+Issue проблема
+Iteration итерация
+Legacy code устаревший код
+Library библиотека
+Maintain поддерживать
+Merge слияние
+Milestone веха
+On call дежурство
+Optimize оптимизировать
+Outage простой
+Patch патч
+POC доказательство концепции
+Production рабочая среда
+Refactor рефакторить
+Regression регрессия
+Release выпуск
+Reliable надежный
+Replicate воспроизводить
+Requirement требование
+Robust надежный
+Rollback откат
+Root cause первопричина
+Scalable масштабируемый
+Scope область
+Script скрипт
+Senior старший
+SLA соглашение об уровне обслуживания
+SLO целевой показатель уровня обслуживания
+Spike краткое исследование
+Stakeholder заинтересованное лицо
+Stand up стендап
+Streamline оптимизировать
+Sprint спринт
+Support поддержка
+Synchronous синхронный
+Tech debt технический долг
+Ticket тикет
+Troubleshoot устранять неполадки
+Uptime время бесперебойной работы
+Use case вариант использования
+Vendor поставщик
+Workflow рабочий процесс
