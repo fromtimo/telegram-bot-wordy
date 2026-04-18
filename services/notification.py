@@ -53,7 +53,12 @@ class NotificationService:
             logger.info("Notification scheduler already running")
             return
 
-        self.scheduler.add_job(self.send_daily_notifications, trigger=CronTrigger(hour=9, minute=0), id="daily_notifications")
+        hour, minute = _parse_notification_time(config.NOTIFICATION_TIME)
+        self.scheduler.add_job(
+            self.send_daily_notifications,
+            trigger=CronTrigger(hour=hour, minute=minute),
+            id="daily_notifications",
+        )
         self.scheduler.start()
         self._running = True
         logger.info("Notification scheduler started")
@@ -69,6 +74,19 @@ class NotificationService:
 
 
 notification_service = None
+
+
+def _parse_notification_time(value: str) -> tuple[int, int]:
+    try:
+        hour_str, minute_str = value.split(":", 1)
+        hour = int(hour_str)
+        minute = int(minute_str)
+        if 0 <= hour <= 23 and 0 <= minute <= 59:
+            return hour, minute
+    except (AttributeError, ValueError):
+        logger.warning("Invalid notification time '%s', fallback to 09:00", value)
+
+    return 9, 0
 
 
 def setup_notifications(bot: Bot) -> NotificationService:

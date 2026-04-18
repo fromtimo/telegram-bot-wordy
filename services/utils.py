@@ -25,12 +25,9 @@ def calculate_level(xp: int) -> dict:
         10: 700,
     }
 
-    thresholds = base_thresholds
-    max_defined = max(base_thresholds.keys())
-    for lvl in range(1, max_defined + 1):
-        thresholds[lvl + 1] = base_thresholds.get(lvl, thresholds.get(lvl, 0))
+    thresholds = dict(base_thresholds)
 
-    current_level = 1
+    current_level = 0
     for lvl in sorted(thresholds.keys()):
         if xp >= thresholds[lvl]:
             current_level = lvl
@@ -81,5 +78,3 @@ def update_streak(user, session):
         logger.info("Streak update for user %s: %s -> %s", getattr(user, 'id', None), old_streak, user.streak)
     except Exception:
         pass
-
-    session.commit()

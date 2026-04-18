@@ -69,15 +69,12 @@ async def show_statistics(message: Message, state: FSMContext):
             user_id=user.id
         ).count()
         
-        total_correct = session.query(func.sum(UserProgress.correct_count)).filter(
+        progress_rows = session.query(UserProgress.correct_count).filter(
             UserProgress.user_id == user.id
-        ).scalar() or 0
-        
-        total_reviews = session.query(func.count(UserProgress.id)).filter(
-            UserProgress.user_id == user.id
-        ).scalar() or 1
-        
-        overall_percentage = int((total_correct / (total_reviews * 5)) * 100) if total_reviews > 0 else 0
+        ).all()
+        capped_correct = sum(min(int(correct_count or 0), 5) for (correct_count,) in progress_rows)
+        total_reviews = len(progress_rows)
+        overall_percentage = int((capped_correct / (total_reviews * 5)) * 100) if total_reviews > 0 else 0
         
         stats_text = "📚 Колоды:\n\n"
         
@@ -97,7 +94,7 @@ async def show_statistics(message: Message, state: FSMContext):
             stats_text += f"{deck_display} — {learned}/{total_in_deck} слов ({avg_correct}% правильных)\n"
         
         stats_text += f"\nПроблемные слова — {problem_words_count}"
-        stats_text += f"\n\nОбщий процент правильных ответов за всё время: {overall_percentage}%"
+        stats_text += f"\n\nОбщий прогресс закрепления слов: {overall_percentage}%"
         
         await message.answer(stats_text, reply_markup=get_back_to_menu_kb())
         

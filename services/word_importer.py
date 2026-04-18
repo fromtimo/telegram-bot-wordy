@@ -45,7 +45,9 @@ def import_words_from_file(file_path: str, deck_name: str) -> int:
 def import_all_decks():
     data_dir = Path(__file__).resolve().parent.parent / "data" / "decks"
     decks = {
-        'top1000.txt': 'top1000'
+        'base.txt': 'base',
+        'it_english.txt': 'it_english',
+        'top1000.txt': 'top1000',
     }
 
     total = 0

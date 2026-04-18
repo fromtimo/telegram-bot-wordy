@@ -42,7 +42,12 @@ async def select_deck(message: Message, state: FSMContext):
         if not deck:
             return
 
-        await state.update_data(selected_deck=deck)
+        await state.update_data(
+            selected_deck=deck,
+            is_problem_words=False,
+            test_answers={},
+            current_word_index=0,
+        )
 
         learned_words_subquery = session.query(UserProgress.word_id).filter(
             UserProgress.user_id == user.id,
@@ -95,7 +100,7 @@ async def review_problem_words(message: Message, state: FSMContext):
         if not problem_words:
             await message.answer(
                 "✅ Проблемных слов для повторения нет!",
-                reply_markup=get_learn_words_kb(False)
+                reply_markup=get_learn_words_kb(has_problem_words=False)
             )
             return
 
@@ -108,7 +113,13 @@ async def review_problem_words(message: Message, state: FSMContext):
                 'deck': w.deck,
             })
 
-        await state.update_data(current_words=serial_problem_words, is_problem_words=True)
+        await state.update_data(
+            current_words=serial_problem_words,
+            is_problem_words=True,
+            selected_deck=None,
+            test_answers={},
+            current_word_index=0,
+        )
         
         words_text = "🔄 Слова для повторения:\n\n"
         for i, word in enumerate(serial_problem_words, 1):
@@ -135,6 +146,9 @@ async def start_test(message: Message, state: FSMContext):
         except Exception:
             logger.exception("Failed to delete words message %s for chat %s", words_message_id, getattr(message.chat, 'id', None))
     
+    data = await state.get_data()
+    testing_state = FSMLearnWords.testing_problem_words if data.get("is_problem_words") else FSMLearnWords.testing
+    await state.set_state(testing_state)
     await ask_next_question(message, state, 0)
 
 async def ask_next_question(message: Message, state: FSMContext, word_index: int):
@@ -176,8 +190,8 @@ async def repeat_words(message: Message, state: FSMContext):
     else:
         await state.set_state(FSMLearnWords.show_new_words)
 
-@router.message(FSMLearnWords.show_new_words)
-@router.message(FSMLearnWords.show_problem_words)
+@router.message(FSMLearnWords.testing)
+@router.message(FSMLearnWords.testing_problem_words)
 async def check_answer(message: Message, state: FSMContext):
     if message.text in ["📖 Повторить слова", "🏠 В меню"]:
         return
@@ -258,39 +272,52 @@ async def finish_test(message: Message, state: FSMContext, words):
     try:
         with db.session_scope() as session:
             user = session.query(User).filter_by(id=getattr(message.from_user, 'id', None)).first()
-            if user and not is_problem_words:
-                new_xp = int(getattr(user, 'xp', 0) or 0) + int(xp_earned)
-                setattr(user, 'xp', new_xp)
+            if user:
+                if not is_problem_words:
+                    new_xp = int(getattr(user, 'xp', 0) or 0) + int(xp_earned)
+                    setattr(user, 'xp', new_xp)
 
                 for i, word in enumerate(words):
-                    if test_answers.get(str(i)):
-                        word_id = word.get('id') if isinstance(word, dict) else getattr(word, 'id', None)
-                        existing_progress = session.query(UserProgress).filter_by(user_id=user.id, word_id=word_id).first()
-                        if existing_progress:
-                            new_count = int(getattr(existing_progress, 'correct_count', 0) or 0) + 1
-                            setattr(existing_progress, 'correct_count', new_count)
-                            setattr(existing_progress, 'learned', True)
-                        else:
-                            progress = UserProgress(user_id=user.id, word_id=word_id, deck=selected_deck, learned=True, correct_count=1)
-                            session.add(progress)
+                    if not test_answers.get(str(i)):
+                        continue
 
-                if not is_problem_words:
-                    for i, word in enumerate(words):
-                        if test_answers.get(str(i)):
-                            word_id = word.get('id') if isinstance(word, dict) else getattr(word, 'id', None)
-                            session.query(ProblemWord).filter_by(user_id=user.id, word_id=word_id).delete()
+                    word_id = word.get('id') if isinstance(word, dict) else getattr(word, 'id', None)
+                    deck_value = (
+                        word.get('deck') if isinstance(word, dict) else getattr(word, 'deck', None)
+                    ) or selected_deck
 
-                if correct_count > 0 and user:
+                    existing_progress = session.query(UserProgress).filter_by(
+                        user_id=user.id,
+                        word_id=word_id,
+                    ).first()
+                    if existing_progress:
+                        new_count = int(getattr(existing_progress, 'correct_count', 0) or 0) + 1
+                        setattr(existing_progress, 'correct_count', new_count)
+                        setattr(existing_progress, 'learned', True)
+                        setattr(existing_progress, 'deck', deck_value)
+                    else:
+                        progress = UserProgress(
+                            user_id=user.id,
+                            word_id=word_id,
+                            deck=deck_value,
+                            learned=True,
+                            correct_count=1,
+                        )
+                        session.add(progress)
+
+                    session.query(ProblemWord).filter_by(user_id=user.id, word_id=word_id).delete()
+
+                if correct_count > 0:
                     try:
                         from services.utils import update_streak
                         old_streak_val = int(getattr(user, 'streak', 0) or 0)
                         update_streak(user, session)
-                        try:
-                            new_streak_val = int(getattr(user, 'streak', 0) or 0)
-                            if new_streak_val > old_streak_val:
-                                await message.answer(f"🔥 Ваш стрик увеличен: {new_streak_val} дней!", reply_markup=get_back_to_menu_kb())
-                        except Exception:
-                            logger.exception("Failed to send streak notification to user %s", getattr(message.from_user, 'id', None))
+                        new_streak_val = int(getattr(user, 'streak', 0) or 0)
+                        if new_streak_val > old_streak_val:
+                            await message.answer(
+                                f"🔥 Ваш стрик увеличен: {new_streak_val} дней!",
+                                reply_markup=get_back_to_menu_kb(),
+                            )
                     except Exception:
                         logger.exception("Failed to update streak for user %s", getattr(message.from_user, 'id', None))
 
